@@ -4,6 +4,9 @@ import "fmt"
 
 var count int
 
+// Both non-recursive and recursive creations of BST have a O(log(n)) time creation, however
+// the recursive methods have O(log(n)) space complexity because of the stack trace having this on memory
+
 // Node represents the components of a binary search tree
 type Node struct {
 	Key   int
@@ -14,20 +17,24 @@ type Node struct {
 // Insert will add a node to the tree
 // the key to add should not be already in the tree
 func (n *Node) Insert(k int) {
-	if n.Key < k {
-		// move to the right
-		if n.Right == nil {
-			n.Right = &Node{Key: k}
-		} else {
-			n.Right.Insert(k)
-		}
 
-	} else if n.Key > k {
-		// move to the left
-		if n.Left == nil {
-			n.Left = &Node{Key: k}
-		} else {
-			n.Left.Insert(k)
+	this := n
+
+	for {
+		if k > this.Key {
+			if this.Right == nil {
+				this.Right = &Node{Key: k}
+				break
+			} else {
+				this = this.Right
+			}
+		} else if k < this.Key {
+			if this.Left == nil {
+				this.Left = &Node{Key: k}
+				break
+			} else {
+				this = this.Left
+			}
 		}
 	}
 }
@@ -36,19 +43,26 @@ func (n *Node) Insert(k int) {
 // and return true if there is a node with that value
 func (n *Node) Search(k int) bool {
 
-	count++
+	this := n
 
-	if n == nil {
-		return false
+	for this != nil {
+		if k > this.Key {
+			this = this.Right
+		} else if k < this.Key {
+			this = this.Left
+		} else {
+			return true
+		}
 	}
+	return false
+}
 
-	if n.Key < k {
-		return n.Right.Search(k)
-	} else if n.Key > k {
-		return n.Left.Search(k)
-	}
+func (n *Node) Remove(k int) {
+	n.removeHelper(k, nil)
+}
 
-	return true
+func (n *Node) removeHelper(k int, parent *Node) {
+
 }
 
 func main() {
@@ -65,7 +79,7 @@ func main() {
 	tree.Insert(76)
 	tree.Insert(150)
 	tree.Insert(310)
-	fmt.Println(tree.Search(150))
+	fmt.Println(tree.Search(52))
 	fmt.Println(count)
 
 }

@@ -2,7 +2,14 @@ package main
 
 import (
 	"fmt"
+	"io"
+	"log"
+	"net/http"
+	"sort"
+	"unicode/utf8"
 )
+
+type Reduction []int
 
 // Graph structure represents and adjacency list graph
 type Graph struct {
@@ -91,4 +98,90 @@ func main() {
 	tg.AddEdge(6, 7)
 	tg.Print()
 
+	res, err := http.Get("https://www.google.com")
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	body, err := io.ReadAll(res.Body)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	fmt.Println(string(body))
+
+	f := Filter([]int{1, 2, 3, 4}, func(b int) bool {
+		return b%2 == 0
+	})
+
+	fmt.Println(f)
+
+	fil := func(b int) bool {
+		return b%2 == 0
+	}
+
+	f2 := Filter([]int{1, 2, 3, 4}, fil)
+	fmt.Println(f2.Reduce())
+	fmt.Println()
+
+	f3 := []int{1, 2, 3, 4}
+
+	sort.Sort(sort.Reverse(sort.IntSlice(f3)))
+
+	b := []byte{'z', 'b'}
+	st := "asd"
+
+	decodeRune, size := utf8.DecodeRune(b)
+	fmt.Println(decodeRune)
+	fmt.Println(size)
+	fmt.Println(utf8.RuneCountInString(st))
+
+	characterReps := make(map[byte]int)
+	characterReps['a'] = 0
+	characterReps['b'] = 1
+	characterReps['c'] = 2
+
+	for i, v := range characterReps {
+		fmt.Println(i)
+		fmt.Println(v)
+	}
+
+	i := []int{10, 20, 30, 40, 50, 60, 70, 80, 90, 100}
+	fmt.Println(i[len(i)/2:])
+
+	fmt.Println(create())
+
+	arr := create()
+
+	arr[0] = 22
+	fmt.Println(arr[0])
+	fmt.Println(arr)
+
+	is := []int{10, 20, 30, 40, 50, 60, 70, 80, 90, 100}
+	is = append(is[:2], is[3:]...)
+	fmt.Println(is)
+
+}
+
+func Filter(sl []int, a func(b int) bool) Reduction {
+	res := make([]int, 0)
+
+	for _, v := range sl {
+		if a(v) {
+			res = append(res, v)
+		}
+	}
+	return res
+}
+
+func (r *Reduction) Reduce() int {
+	res := 0
+	for _, v := range *r {
+		res += v
+	}
+	return res
+}
+
+func create() []int {
+	return make([]int, 10)
 }

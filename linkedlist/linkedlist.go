@@ -47,7 +47,7 @@ func (l *linkedList) deleteWithValue(v int) {
 	l.len--
 }
 
-func (l linkedList) printListData() {
+func (l *linkedList) printListData() {
 	for e := l.head; e != nil; e = e.next {
 		fmt.Println(e.data)
 	}
