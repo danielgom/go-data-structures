@@ -119,4 +119,38 @@ func main() {
 		m.Extract()
 		fmt.Println(m)
 	}
+
+
+	s := "2+1"
+	st := (s[0] - 48) + (s[2] - 48)
+	fmt.Println(st)
+
+	digits := []int{8,9,9}
+
+	doSomething(digits)
+	fmt.Println(digits)
+
+	fmt.Println([]int{1})
+}
+
+func doSomething(digits []int) []int {
+
+	lastNum := digits[len(digits)-1]
+	if lastNum < 9 {
+		digits[len(digits)-1] += 1
+		return digits
+	} else {
+		for idx := len(digits)-1; idx >=0; idx-- {
+			if digits[idx] == 9 {
+				digits[idx] = 0
+			} else {
+				digits[idx] += 1
+				return digits
+			}
+		}
+		if digits[0] == 0{
+			digits = append([]int{1}, digits...)
+		}
+	}
+	return digits
 }

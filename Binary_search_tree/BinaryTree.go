@@ -1,6 +1,13 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"log"
+	"regexp"
+	"sort"
+	"strconv"
+	"strings"
+)
 
 var count int
 
@@ -81,5 +88,37 @@ func main() {
 	tree.Insert(310)
 	fmt.Println(tree.Search(52))
 	fmt.Println(count)
+
+	intervals := [][]int{{10, 20}, {21, 32},{1, 5},{2, 10},{13, 15},{6, 9},{8, 17}}
+	fmt.Println(intervals)
+	sort.Slice(intervals, func(i, j int) bool {
+		return intervals[i][0] < intervals[j][0]
+	})
+	fmt.Println(intervals)
+
+	var longInterval []int
+	longInterval = append(longInterval, 1,2,3)
+	fmt.Println(longInterval)
+	fmt.Println(longInterval[0:0])
+
+	var notes []string
+
+	notes = []string{"10.0% higher than in-store",
+	"5.0% lower than in-store",
+	"Same as in-store"}
+	fmt.Println(notes)
+
+	fmt.Println(strings.Contains(notes[2], "Same"))
+	compile := regexp.MustCompile("[^0-9.]")
+	fmt.Println(compile.MatchString("10.0% higher than in-store"))
+	fmt.Println(compile.ReplaceAllString("10.0% higher than in-store", ""))
+
+	allString := compile.ReplaceAllString("10.133% higher than in-store", "")
+	float, err := strconv.ParseFloat(allString, 10)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	fmt.Println(float)
 
 }
