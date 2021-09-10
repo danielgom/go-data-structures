@@ -109,7 +109,7 @@ func main() {
 
 	m := &MaxHeap{}
 	fmt.Println(m)
-	buildHeap := []int{10, 20, 30, 5, 7, 9, 11, 13, 15, 17}
+	buildHeap := []int{10, 20, 30, 5, 7, 9, 11, 13, 15, 17, 50}
 	for _, v := range buildHeap {
 		m.Insert(v)
 		fmt.Println(m)

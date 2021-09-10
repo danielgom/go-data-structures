@@ -64,11 +64,82 @@ func (n *Node) Search(k int) bool {
 	return false
 }
 
+// Remove will remove and balance the BinarySearchTree
 func (n *Node) Remove(k int) {
 	n.removeHelper(k, nil)
 }
 
-func (n *Node) removeHelper(k int, parent *Node) {
+// removeHelper is the central method in order to remove a node from a BST
+func (n *Node) removeHelper(key int, parent *Node) {
+
+	currentNode := n
+
+ 	for currentNode != nil {
+ 		fmt.Println(currentNode.Key)
+ 		if currentNode.Key > key {
+ 			parent = currentNode
+ 			currentNode = currentNode.Left
+		} else if currentNode.Key < key {
+			parent = currentNode
+			currentNode = currentNode.Right
+		} else {
+			if currentNode.Left != nil && currentNode.Right != nil {
+				currentNode.Key = currentNode.Right.getMinVal()
+				currentNode.Right.removeHelper(currentNode.Key, currentNode)
+			} else if parent == nil {
+				if currentNode.Left != nil {
+					currentNode.Key = currentNode.Left.Key
+					currentNode.Left = currentNode.Left.Left
+				} else if currentNode.Right != nil {
+					currentNode.Key = currentNode.Right.Key
+					currentNode.Right = currentNode.Right.Right
+				} else {
+					currentNode = nil
+				}
+			} else if parent.Left == currentNode {
+				if currentNode.Left != nil {
+					parent.Left = currentNode.Left
+				} else {
+					parent.Left = currentNode.Right
+				}
+			} else if parent.Right == currentNode {
+				if currentNode.Left != nil {
+					parent.Right = currentNode.Left
+				} else {
+					parent.Right = currentNode.Right
+				}
+			}
+			break
+		}
+	}
+}
+
+// getMinVal returns the minimum value/key from the current node, the minimum value of a BST
+// is the leftmost value in the last level (height 0)
+func (n *Node) getMinVal() int {
+	current := n
+
+	for current != nil {
+		current = current.Left
+	}
+
+	return current.Key
+}
+
+// PrintInOrder prints into the console the ordered BST
+func (n *Node) PrintInOrder() {
+
+	current := n
+
+	if current.Left != nil {
+		current.Left.PrintInOrder()
+	}
+
+	fmt.Print(" ", current.Key)
+
+	if current.Right != nil {
+		current.Right.PrintInOrder()
+	}
 
 }
 
@@ -86,8 +157,13 @@ func main() {
 	tree.Insert(76)
 	tree.Insert(150)
 	tree.Insert(310)
+	tree.Remove(150)
 	fmt.Println(tree.Search(52))
 	fmt.Println(count)
+
+	fmt.Println("printing ordered bst")
+	tree.PrintInOrder()
+	fmt.Println()
 
 	intervals := [][]int{{10, 20}, {21, 32},{1, 5},{2, 10},{13, 15},{6, 9},{8, 17}}
 	fmt.Println(intervals)
