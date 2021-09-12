@@ -28,7 +28,7 @@ func (n *Node) Insert(k int) {
 	this := n
 
 	for {
-		if k > this.Key {
+		if k >= this.Key {
 			if this.Right == nil {
 				this.Right = &Node{Key: k}
 				break
@@ -64,6 +64,33 @@ func (n *Node) Search(k int) bool {
 	return false
 }
 
+// InOrderTraverse will print the BST in order
+func (n *Node) InOrderTraverse() {
+
+	var pre *Node
+	this := n
+
+	for this != nil {
+		if this.Left == nil {
+			fmt.Println(this.Key)
+			this = this.Right
+		} else {
+			pre = this.Left
+			for pre.Right != nil && pre.Right != this {
+				pre = pre.Right
+			}
+			if pre.Right == nil {
+				pre.Right = this
+				this = this.Left
+			} else {
+				pre.Right = nil
+				fmt.Println(this.Key)
+				this = this.Right
+			}
+		}
+	}
+}
+
 func (n *Node) Remove(k int) {
 	n.removeHelper(k, nil)
 }
@@ -75,21 +102,22 @@ func (n *Node) removeHelper(k int, parent *Node) {
 func main() {
 
 	tree := &Node{
-		Key:   100,
+		Key:   10,
 		Left:  nil,
 		Right: nil,
 	}
 
-	tree.Insert(101)
-	tree.Insert(52)
-	tree.Insert(19)
-	tree.Insert(76)
-	tree.Insert(150)
-	tree.Insert(310)
+	tree.Insert(5)
+	tree.Insert(15)
+	tree.Insert(2)
+	tree.Insert(5)
+	tree.Insert(1)
+	tree.Insert(22)
 	fmt.Println(tree.Search(52))
-	fmt.Println(count)
 
-	intervals := [][]int{{10, 20}, {21, 32},{1, 5},{2, 10},{13, 15},{6, 9},{8, 17}}
+	tree.InOrderTraverse()
+
+	intervals := [][]int{{10, 20}, {21, 32}, {1, 5}, {2, 10}, {13, 15}, {6, 9}, {8, 17}}
 	fmt.Println(intervals)
 	sort.Slice(intervals, func(i, j int) bool {
 		return intervals[i][0] < intervals[j][0]
@@ -97,15 +125,15 @@ func main() {
 	fmt.Println(intervals)
 
 	var longInterval []int
-	longInterval = append(longInterval, 1,2,3)
+	longInterval = append(longInterval, 1, 2, 3)
 	fmt.Println(longInterval)
 	fmt.Println(longInterval[0:0])
 
 	var notes []string
 
 	notes = []string{"10.0% higher than in-store",
-	"5.0% lower than in-store",
-	"Same as in-store"}
+		"5.0% lower than in-store",
+		"Same as in-store"}
 	fmt.Println(notes)
 
 	fmt.Println(strings.Contains(notes[2], "Same"))
@@ -120,5 +148,4 @@ func main() {
 	}
 
 	fmt.Println(float)
-
 }
