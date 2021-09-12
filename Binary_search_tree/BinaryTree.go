@@ -9,8 +9,6 @@ import (
 	"strings"
 )
 
-var count int
-
 // Both non-recursive and recursive creations of BST have a O(log(n)) time creation, however
 // the recursive methods have O(log(n)) space complexity because of the stack trace having this on memory
 
@@ -91,12 +89,66 @@ func (n *Node) InOrderTraverse() {
 	}
 }
 
+// Remove will remove and balance the BinarySearchTree
 func (n *Node) Remove(k int) {
 	n.removeHelper(k, nil)
 }
 
-func (n *Node) removeHelper(k int, parent *Node) {
+// removeHelper is the central method in order to remove a node from a BST
+func (n *Node) removeHelper(key int, parent *Node) {
 
+	currentNode := n
+
+ 	for currentNode != nil {
+ 		fmt.Println(currentNode.Key)
+ 		if currentNode.Key > key {
+ 			parent = currentNode
+ 			currentNode = currentNode.Left
+		} else if currentNode.Key < key {
+			parent = currentNode
+			currentNode = currentNode.Right
+		} else {
+			if currentNode.Left != nil && currentNode.Right != nil {
+				currentNode.Key = currentNode.Right.getMinVal()
+				currentNode.Right.removeHelper(currentNode.Key, currentNode)
+			} else if parent == nil {
+				if currentNode.Left != nil {
+					currentNode.Key = currentNode.Left.Key
+					currentNode.Left = currentNode.Left.Left
+				} else if currentNode.Right != nil {
+					currentNode.Key = currentNode.Right.Key
+					currentNode.Right = currentNode.Right.Right
+				} else {
+					currentNode = nil
+				}
+			} else if parent.Left == currentNode {
+				if currentNode.Left != nil {
+					parent.Left = currentNode.Left
+				} else {
+					parent.Left = currentNode.Right
+				}
+			} else if parent.Right == currentNode {
+				if currentNode.Left != nil {
+					parent.Right = currentNode.Left
+				} else {
+					parent.Right = currentNode.Right
+				}
+			}
+			break
+		}
+	}
+}
+
+// getMinVal returns the minimum value/key from the current node, the minimum value of a BST
+// is the leftmost value in the last level (height 0)
+func (n *Node) getMinVal() int {
+	current := n
+
+	for current != nil {
+		current = current.Left
+	}
+
+	return current.Key
 }
 
 func main() {
@@ -113,6 +165,13 @@ func main() {
 	tree.Insert(5)
 	tree.Insert(1)
 	tree.Insert(22)
+	tree.Insert(101)
+	tree.Insert(52)
+	tree.Insert(19)
+	tree.Insert(76)
+	tree.Insert(150)
+	tree.Insert(310)
+	tree.Remove(150)
 	fmt.Println(tree.Search(52))
 
 	tree.InOrderTraverse()
