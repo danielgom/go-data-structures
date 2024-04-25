@@ -24,6 +24,28 @@ func (l *linkedList) prepend(n *Node) {
 	l.len++
 }
 
+func (l *linkedList) insert(n *Node, index int) {
+	if l.len == 0 {
+		return
+	}
+
+	if index == 1 {
+		l.prepend(n)
+		return
+	}
+
+	previousNode := l.head
+	currentPosition := 2
+	for currentPosition < index {
+		previousNode = previousNode.next
+		currentPosition++
+	}
+
+	n.next = previousNode.next
+	n.list = l
+	previousNode.next = n
+}
+
 func (l *linkedList) deleteWithValue(v int) {
 	if l.len == 0 {
 		return
@@ -49,8 +71,9 @@ func (l *linkedList) deleteWithValue(v int) {
 
 func (l *linkedList) printListData() {
 	for e := l.head; e != nil; e = e.next {
-		fmt.Println(e.data)
+		fmt.Print(e.data, " ")
 	}
+	fmt.Println()
 }
 
 func main() {
@@ -66,6 +89,7 @@ func main() {
 	l.printListData()
 
 	l.deleteWithValue(11)
+	l.insert(&Node{data: 100}, 4)
 	l.printListData()
 
 }
