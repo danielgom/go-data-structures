@@ -91,5 +91,4 @@ func main() {
 	l.deleteWithValue(11)
 	l.insert(&Node{data: 100}, 4)
 	l.printListData()
-
 }

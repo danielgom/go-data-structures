@@ -120,17 +120,27 @@ func main() {
 		fmt.Println(m)
 	}
 
-
 	s := "2+1"
 	st := (s[0] - 48) + (s[2] - 48)
 	fmt.Println(st)
 
-	digits := []int{8,9,9}
+	digits := []int{8, 9, 9}
 
 	doSomething(digits)
 	fmt.Println(digits)
 
 	fmt.Println([]int{1})
+
+	fmt.Println("New heap")
+	toMaxHeap := []int{3, 10, 7, 2}
+	maxH := &MaxHeap{}
+
+	for _, v := range toMaxHeap {
+		maxH.Insert(v)
+	}
+
+	fmt.Println(maxH)
+
 }
 
 func doSomething(digits []int) []int {
@@ -140,7 +150,7 @@ func doSomething(digits []int) []int {
 		digits[len(digits)-1] += 1
 		return digits
 	} else {
-		for idx := len(digits)-1; idx >=0; idx-- {
+		for idx := len(digits) - 1; idx >= 0; idx-- {
 			if digits[idx] == 9 {
 				digits[idx] = 0
 			} else {
@@ -148,7 +158,7 @@ func doSomething(digits []int) []int {
 				return digits
 			}
 		}
-		if digits[0] == 0{
+		if digits[0] == 0 {
 			digits = append([]int{1}, digits...)
 		}
 	}

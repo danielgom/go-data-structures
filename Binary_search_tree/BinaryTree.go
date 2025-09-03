@@ -22,9 +22,7 @@ type Node struct {
 // Insert will add a node to the tree
 // the key to add should not be already in the tree
 func (n *Node) Insert(k int) {
-
 	this := n
-
 	for {
 		if k >= this.Key {
 			if this.Right == nil {
@@ -64,13 +62,11 @@ func (n *Node) Search(k int) bool {
 
 // InOrderTraverse will print the BST in order
 func (n *Node) InOrderTraverse() {
-
 	var pre *Node
 	this := n
 
 	for this != nil {
 		if this.Left == nil {
-			fmt.Println(this.Key)
 			this = this.Right
 		} else {
 			pre = this.Left
@@ -82,7 +78,6 @@ func (n *Node) InOrderTraverse() {
 				this = this.Left
 			} else {
 				pre.Right = nil
-				fmt.Println(this.Key)
 				this = this.Right
 			}
 		}
@@ -96,14 +91,12 @@ func (n *Node) Remove(k int) {
 
 // removeHelper is the central method in order to remove a node from a BST
 func (n *Node) removeHelper(key int, parent *Node) {
-
 	currentNode := n
 
- 	for currentNode != nil {
- 		fmt.Println(currentNode.Key)
- 		if currentNode.Key > key {
- 			parent = currentNode
- 			currentNode = currentNode.Left
+	for currentNode != nil {
+		if currentNode.Key > key {
+			parent = currentNode
+			currentNode = currentNode.Left
 		} else if currentNode.Key < key {
 			parent = currentNode
 			currentNode = currentNode.Right
